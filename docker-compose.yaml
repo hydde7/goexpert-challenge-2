@@ -20,7 +20,6 @@ services:
   service-a:
     build: ./service-a
     environment:
-      - PORT=8080
       - SERVICE_B_URL=http://service-b:9090/cep
       - OTEL_ENDPOINT=otel-collector:4317
       - OTEL_SERVICE_NAME=service-a
@@ -35,7 +34,6 @@ services:
   service-b:
     build: ./service-b
     environment:
-      - PORT=9090
       - OTEL_ENDPOINT=otel-collector:4317
       - OTEL_SERVICE_NAME=service-b
       - FREEWEATHER_API_KEY=COLOQUE SUA API KEY AQUI
