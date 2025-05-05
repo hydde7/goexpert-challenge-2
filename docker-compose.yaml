@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    volumes:
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+    command: ["--config=/etc/otel-collector-config.yml"]
+    ports:
+      - "4317:4317"
+    networks:
+      - goexpert-challenge-2
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+    networks:
+      - goexpert-challenge-2
+
+  service-a:
+    build: ./service-a
+    environment:
+      - PORT=8080
+      - SERVICE_B_URL=http://service-b:9090/cep
+      - OTEL_ENDPOINT=otel-collector:4317
+      - OTEL_SERVICE_NAME=service-a
+    depends_on:
+      - service-b
+      - otel-collector
+    ports:
+      - "8080:8080"
+    networks:
+      - goexpert-challenge-2
+
+  service-b:
+    build: ./service-b
+    environment:
+      - PORT=9090
+      - OTEL_ENDPOINT=otel-collector:4317
+      - OTEL_SERVICE_NAME=service-b
+      - FREEWEATHER_API_KEY=COLOQUE SUA API KEY AQUI
+    depends_on:
+      - otel-collector
+    ports:
+      - "9090:9090"
+    networks:
+      - goexpert-challenge-2
+
+networks:
+  goexpert-challenge-2:
+    driver: bridge
+    name: goexpert-challenge-2
+            

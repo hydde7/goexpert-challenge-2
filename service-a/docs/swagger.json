@@ -1,0 +1,116 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/appstatus": {
+            "get": {
+                "description": "Get app status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Get app status",
+                "responses": {
+                    "200": {
+                        "description": "App Status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/cep": {
+            "post": {
+                "description": "Get temperature by zipcode",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CEP"
+                ],
+                "summary": "Get temperature by zipcode",
+                "parameters": [
+                    {
+                        "description": "CEP",
+                        "name": "cep",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CepPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Temperature",
+                        "schema": {
+                            "$ref": "#/definitions/models.CepResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "invalid zipcode",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.CepPayload": {
+            "type": "object",
+            "properties": {
+                "cep": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CepResponse": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "temp_C": {
+                    "type": "number"
+                },
+                "temp_F": {
+                    "type": "number"
+                },
+                "temp_K": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

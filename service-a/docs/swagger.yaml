@@ -1,0 +1,74 @@
+definitions:
+  models.CepPayload:
+    properties:
+      cep:
+        type: string
+    type: object
+  models.CepResponse:
+    properties:
+      city:
+        type: string
+      temp_C:
+        type: number
+      temp_F:
+        type: number
+      temp_K:
+        type: number
+    type: object
+info:
+  contact: {}
+paths:
+  /appstatus:
+    get:
+      consumes:
+      - application/json
+      description: Get app status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: App Status
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get app status
+      tags:
+      - App
+  /cep:
+    post:
+      consumes:
+      - application/json
+      description: Get temperature by zipcode
+      parameters:
+      - description: CEP
+        in: body
+        name: cep
+        required: true
+        schema:
+          $ref: '#/definitions/models.CepPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Temperature
+          schema:
+            $ref: '#/definitions/models.CepResponse'
+        "422":
+          description: invalid zipcode
+          schema:
+            type: string
+        "500":
+          description: internal server error
+          schema:
+            type: string
+      summary: Get temperature by zipcode
+      tags:
+      - CEP
+swagger: "2.0"
